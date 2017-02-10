@@ -1,0 +1,68 @@
+
+import numpy as np
+import math as mp
+import ast
+import matplotlib.pyplot as plt
+#Opening the input file and formating it
+with open("sample_input",'r') as stream:
+    file_data = stream.read()
+    file_data = file_data.split("\n")
+    file_data_temp = []
+    for line in file_data:
+        file_data_temp.append(ast.literal_eval(line.strip("-")))
+    file_data = file_data_temp
+
+print(file_data)
+centroid =[[16,19],[2,5]]
+kcount = int(input('Enter the number of clusters. i.e value of k : '))
+range1=100/kcount
+
+#Randomly assigning centroids using percentiles, so the centroids are uniformly selected.
+"""for i in range(kcount):
+    centroid.append([np.percentile([x[0] for x in file_data],range1*(i+1)),np.percentile([x[1] for x in file_data],range1*(i+1))])
+"""
+print('centroid is',centroid)
+distance =[]#Initialize the Distance metric
+new_clusters =[[]for i in range(kcount)]#New clusters formed after computing the distance with centroid
+
+for i in file_data:
+    for j in range(kcount):
+        print('Value is', i,i[0])
+        print('Centroid is',centroid[j])
+        distance.append([mp.sqrt(((i[0] - centroid[j][0]) ** 2)+((i[1] - centroid[j][1]) ** 2))])
+        if j == kcount-1:
+            clusterindex=distance.index(min(distance))
+            new_clusters[clusterindex].append(i)
+            distance =[]
+
+print('new_cluster is',new_clusters)
+new_centroid =[]#New centroid values after calculating the average of datasets in new clusters.
+for i in range(kcount):
+    sumx = 0
+    sumy = 0
+    for j in range(len(new_clusters[i])):
+        sumx = sumx+new_clusters[i][j][0]
+        sumy = sumy+new_clusters[i][j][1]
+    meanx =sumx/(j+1)
+    meany =sumy/(j+1)
+    new_centroid.append([meanx,meany])
+
+
+centroid_difference=[]
+for i in range(kcount):
+    centroid_difference.append([[centroid[i][0]-new_centroid[i][0]],[centroid[i][1]-new_centroid[i][1]]])
+
+
+
+print('centroid difference is',centroid_difference)
+
+print('Old Centroid is', centroid)
+print('New Centroid is', new_centroid)
+
+
+
+
+plt.interactive(False)
+xs = [x[0] for x in file_data]
+ys = [x[1] for x in file_data]
+plt.scatter(xs, ys)
