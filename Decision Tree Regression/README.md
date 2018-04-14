@@ -1,4 +1,4 @@
-1. Polynomial_Regression.ipynb:
+1. Decision Tree Regression.ipynb:
 Understanding decision tree regression and predicting salaries based on position level of employee
 And also visualized the actual and predicted salaries.
 
